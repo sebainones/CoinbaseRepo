@@ -10,10 +10,7 @@ namespace Coinbase.Connector.Services
         private static readonly HttpClient httpClient = new HttpClient();
 
         private const string ApiKeyField = "CB-ACCESS-KEY";
-        private readonly string ApiKeyValue;
         private string MessageSignaturField = "CB-ACCESS-SIGN";
-        private string MessageSignatureValue;
-
         private const string TimestampField = "CB-ACCESS-TIMESTAMP";
         private string TimeStamp => GetTimeStamp();
 
@@ -21,8 +18,6 @@ namespace Coinbase.Connector.Services
         //https://developers.coinbase.com/api/v2?shell#oauth2-coinbase-connect
         public CoinBaseClient()
         {
-            ApiKeyValue = AppSettings.HydratedAppSettings.ApiKey;
-
             Console.WriteLine($"Hello Unix epoch {TimeStamp}");
             Console.WriteLine(AppSettings.HydratedAppSettings.MediaTypeJson);
         }
@@ -34,31 +29,44 @@ namespace Coinbase.Connector.Services
 
         public async void MakeRequestCall(string method, string requestPath, string body = "")
         {
+            try
+            {
+                AddRequestHeaders(method, requestPath, body);
+                httpClient.BaseAddress = new Uri(AppSettings.HydratedAppSettings.ApiEndpoint);
 
-            AddRequestHeaders(method, requestPath, body);
-            httpClient.BaseAddress = new Uri(AppSettings.HydratedAppSettings.ApiEndpoint);
+                System.Threading.Tasks.Task<HttpResponseMessage> task = httpClient.GetAsync(requestPath);
 
-            var result = await httpClient.GetAsync(requestPath);
+                task.Wait();
 
-            Console.WriteLine(result);
+                var result = task.Result;
+
+                Console.WriteLine(result);
+            }
+            catch (Exception exception)
+            {
+
+                throw;
+            }
+
 
         }
         private void AddRequestHeaders(string method, string requestPath, string body = "")
         {
-
             // All REST requests must contain the following headers:
 
             // CB-ACCESS-KEY API key as a string
             httpClient.DefaultRequestHeaders.Accept.Clear();
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(AppSettings.HydratedAppSettings.MediaTypeJson));
-            httpClient.DefaultRequestHeaders.Add(ApiKeyField, ApiKeyValue);
+            httpClient.DefaultRequestHeaders.Add(ApiKeyField, AppSettings.HydratedAppSettings.ApiKey);
 
             var currentTiempStamp = TimeStamp;
+
             // CB-ACCESS-SIGN Message signature (see below)
             // timestamp + method + requestPath + body
+            var composedKey = currentTiempStamp + method.ToUpper() + requestPath + body;
+            byte[] hashedSignature = Hashomatic.HashHMAC(AppSettings.HydratedAppSettings.ApiSecret, composedKey);
 
-            var compesedKey = currentTiempStamp + method.ToUpper() + requestPath + body;
-            Hashomatic.HashHMAC(AppSettings.HydratedAppSettings.ApiKey, compesedKey);
+            string MessageSignatureValue = System.Text.Encoding.ASCII.GetString(hashedSignature);
             httpClient.DefaultRequestHeaders.Add(MessageSignaturField, MessageSignatureValue);
 
             // CB-ACCESS-TIMESTAMP Timestamp for your request

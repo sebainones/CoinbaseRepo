@@ -13,7 +13,6 @@ namespace CoinBase.Connector.Utils
                 {
                     appSettingsInstance = new AppSettings();
                     InitiliazeSettings();
-
                 }
                 return appSettingsInstance;
             }
@@ -38,6 +37,5 @@ namespace CoinBase.Connector.Utils
         public string ApiSecret { get; set; }
         public string MediaTypeJson { get; set; }
         public string ApiEndpoint { get; set; }
-
     }
 }
