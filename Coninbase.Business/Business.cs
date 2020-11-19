@@ -18,18 +18,11 @@ namespace CoinBase.Business
         }
         public async Task<List<Currency>> GetCurrenciesAsync(string[] currenciesName)
         {
-            coinBaseClient.MakeAuthorizedRequestCall(RestMethods.GET, @"/v2/exchange-rates?currency=USD", string.Empty);
-
-            var result = await coinBaseClient.MakeNormalRequestCallAsync<Response>(RestMethods.GET, @"/v2/currencies/", string.Empty);
-
-            foreach (var currency in result.Data)
-            {
-                if (currenciesName.Contains(currency.Id))
-                    Console.WriteLine(currency.Name);
-
-            }
+            var result = await coinBaseClient.MakeNormalRequestCallAsync<Response>( @"/v2/currencies/", string.Empty);
 
             return result.Data.Where(c => currenciesName.Contains(c.Id)).ToList();
         }
+
+        //coinBaseClient.MakeAuthorizedRequestCall(RestMethods.GET, @"/v2/exchange-rates?currency=USD", string.Empty);
     }
 }

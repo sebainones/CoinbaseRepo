@@ -6,6 +6,6 @@ namespace Coinbase.Connector.Services
     {
         string GetTimeStamp();
         void MakeAuthorizedRequestCall(string gEmethodT, string requestPath, string body);
-        Task<T> MakeNormalRequestCallAsync<T>(string method, string requestPath, string body);
+        Task<T> MakeNormalRequestCallAsync<T>(string requestPath, string body);
     }
 }

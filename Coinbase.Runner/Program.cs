@@ -14,33 +14,33 @@ namespace Coinbase.Runner
     {
         static async Task Main(string[] args)
         {
-            Console.WriteLine(AppSettings.HydratedAppSettings.ApiKey);
-
-            //ConsoleLoggerExtensions.AddConsole(new ConsoleLogger())
+            Console.WriteLine(">>> Starting >>>>");
 
             var serviceCollection = new ServiceCollection();
 
-            serviceCollection.AddSingleton<IBusiness, Business>();
-            serviceCollection.AddSingleton<ICoinBaseClient, CoinBaseClient>();
-
-            var serviceProvider = serviceCollection
-                      .AddLogging() //<-- You were missing this
-                      .BuildServiceProvider();
-            //get logger
-            var logger = serviceProvider.GetService<ILoggerFactory>()
-                        .CreateLogger<Program>();
+            var serviceProvider = ConfigureServices(serviceCollection);
 
 
             IBusiness business = serviceProvider.GetService<IBusiness>();
 
-
             var getCurrenciesTask = business.GetCurrenciesAsync(new string[] { "USD", "EUR" });
-
             getCurrenciesTask.Wait();
 
             var currencies = getCurrenciesTask.Result;
 
             Console.WriteLine(currencies.FirstOrDefault());
+        }
+
+        private static ServiceProvider ConfigureServices(IServiceCollection services)
+        {
+
+            services.AddSingleton<IBusiness, Business>();
+            services.AddSingleton<ICoinBaseClient, CoinBaseClient>();
+
+            //we will configure logging here
+            return services
+                     .AddLogging(configure => configure.AddConsole()) //added Console Logging!
+                     .BuildServiceProvider();
         }
     }
 }

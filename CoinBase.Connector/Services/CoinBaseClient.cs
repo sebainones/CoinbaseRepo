@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using CoinBase.Connector.Utils;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Coinbase.Connector.Services
@@ -10,7 +11,7 @@ namespace Coinbase.Connector.Services
     public class CoinBaseClient : ICoinBaseClient
     {
         private static readonly HttpClient httpClient = new HttpClient() { BaseAddress = new Uri(AppSettings.HydratedAppSettings.ApiEndpoint) };
-
+        private readonly ILogger logger;
         private const string ApiKeyField = "CB-ACCESS-KEY";
         private string MessageSignaturField = "CB-ACCESS-SIGN";
         private const string TimestampField = "CB-ACCESS-TIMESTAMP";
@@ -19,33 +20,39 @@ namespace Coinbase.Connector.Services
 
         //TODO: https://developers.coinbase.com/docs/wallet/api-key-authentication
         //https://developers.coinbase.com/api/v2?shell#oauth2-coinbase-connect
-        public CoinBaseClient()
+        public CoinBaseClient(ILogger<CoinBaseClient> logger)
         {
             Console.WriteLine($"Hello Unix epoch {TimeStamp}");
-            Console.WriteLine(AppSettings.HydratedAppSettings.MediaTypeJson);
+
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
         public string GetTimeStamp()
         {
-            return ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
+            return ((int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
         }
 
-        public async Task<T> MakeNormalRequestCallAsync<T>(string method, string requestPath, string body = "")
+        public async Task<T> MakeNormalRequestCallAsync<T>(string requestPath, string body = "")
         {
+            logger.LogInformation("MakeNormalRequestCallAsync");
+
+            T items = default;
             try
             {
                 AddBasicRequestHeaders();
 
                 var result = await httpClient.GetAsync(requestPath);
+                result.EnsureSuccessStatusCode();
+
                 string contenido = await result.Content.ReadAsStringAsync();
 
-                T items = JsonConvert.DeserializeObject<T>(contenido);
-                return items;
+                items = JsonConvert.DeserializeObject<T>(contenido);
 
             }
             catch (Exception exception)
             {
-                throw;
+                logger.LogError(exception.Message, null);
             }
+            return items;
         }
 
         public async void MakeNormalRequestCall(string method, string requestPath, string body = "")
@@ -58,7 +65,7 @@ namespace Coinbase.Connector.Services
             }
             catch (Exception exception)
             {
-                throw;
+                logger.LogError(exception.Message, null);
             }
         }
         public async void MakeAuthorizedRequestCall(string method, string requestPath, string body = "")
@@ -71,13 +78,13 @@ namespace Coinbase.Connector.Services
             }
             catch (Exception exception)
             {
-                throw;
+                logger.LogError(exception.Message, null);
             }
         }
 
         private static void PerformRequest(string requestPath)
         {
-            System.Threading.Tasks.Task<HttpResponseMessage> task = httpClient.GetAsync(requestPath);
+            Task<HttpResponseMessage> task = httpClient.GetAsync(requestPath);
 
             task.Wait();
 
