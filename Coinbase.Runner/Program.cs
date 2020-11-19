@@ -18,8 +18,12 @@ namespace Coinbase.Runner
 
             //ConsoleLoggerExtensions.AddConsole(new ConsoleLogger())
 
-            //TODO:  use DI framework
-            var serviceProvider = new ServiceCollection()
+            var serviceCollection = new ServiceCollection();
+
+            serviceCollection.AddSingleton<IBusiness, Business>();
+            serviceCollection.AddSingleton<ICoinBaseClient, CoinBaseClient>();
+
+            var serviceProvider = serviceCollection
                       .AddLogging() //<-- You were missing this
                       .BuildServiceProvider();
             //get logger
@@ -27,7 +31,8 @@ namespace Coinbase.Runner
                         .CreateLogger<Program>();
 
 
-            IBusiness business = new Business(new CoinBaseClient());
+            IBusiness business = serviceProvider.GetService<IBusiness>();
+
 
             var getCurrenciesTask = business.GetCurrenciesAsync(new string[] { "USD", "EUR" });
 
