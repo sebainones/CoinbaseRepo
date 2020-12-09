@@ -8,6 +8,12 @@ using System.Threading.Tasks;
 
 namespace CoinBase.Business
 {
+    //https://developers.coinbase.com/api/v2
+    /// <summary>
+    /// Business class to interecat with CoinBase endpoint API
+    // Coinbase provides a simple and powerful REST API to integrate
+    // bitcoin, bitcoin cash, litecoin and ethereum payments into your application.
+    /// </summary>
     public class Business : IBusiness
     {
         private readonly ICoinBaseClient coinBaseClient;
@@ -26,22 +32,15 @@ namespace CoinBase.Business
 
         public async Task<List<Currency>> GetCurrenciesAsync(string[] currenciesName)
         {
-            //var result = await coinBaseClient.MakeNormalRequestCallAsync<CurrenciesResponse>(@"/v2/currencies/", string.Empty);
-
             var result = await coinBaseClient.MakeNormalRequestCallAsync<ResponseOf<List<Currency>>>(@"/v2/currencies/", string.Empty);
-
             return result.Data.Where(c => currenciesName.Contains(c.Id)).ToList();
         }
 
         public async Task<ExchangeRate> GetExchangeRatesAsync(string currency)
         {
-            //var result = await coinBaseClient.MakeNormalRequestCallAsync<ExchangeRatesResponse>(@$"/v2/exchange-rates?currency={currency}", string.Empty);
-
             var result = await coinBaseClient.MakeNormalRequestCallAsync<ResponseOf<ExchangeRate>>(@$"/v2/exchange-rates?currency={currency}", string.Empty);
 
             return result.Data;
         }
-
-        //coinBaseClient.MakeAuthorizedRequestCall(RestMethods.GET, @"/v2/exchange-rates?currency=USD", string.Empty);
     }
 }

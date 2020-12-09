@@ -31,15 +31,16 @@ namespace Coinbase.Connector.Services
         {
             return ((int)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
         }
-
         public async Task<T> MakeNormalRequestCallAsync<T>(string requestPath, string body = "")
         {
             AddBasicRequestHeaders();
-
             return await PerformRequest<T>(requestPath);
-            //return typedResult;
         }
-
+        public async Task<T> MakeAuthorizedRequestCall<T>(string requestPath, string body)
+        {
+            AddApiKeyRequestHeaders(RestMethods.GET, requestPath, body);
+            return await PerformRequest<T>(requestPath);
+        }
         private async Task<T> PerformRequest<T>(string requestPath)
         {
             try
@@ -56,16 +57,9 @@ namespace Coinbase.Connector.Services
             }
             return default;
         }
-
-        public async Task<T> MakeAuthorizedRequestCall<T>(string requestPath, string body)
+        private void AddApiKeyRequestHeaders(string method, string requestPath, string body = "")
         {
-            AddAuthorizedRequestHeaders(RestMethods.GET, requestPath, body);
-
-            return await PerformRequest<T>(requestPath);
-        }
-
-        private void AddAuthorizedRequestHeaders(string method, string requestPath, string body = "")
-        {
+            //https://developers.coinbase.com/api/v2#api-key
             // All REST requests must contain the following headers:
 
             // CB-ACCESS-KEY API key as a string
