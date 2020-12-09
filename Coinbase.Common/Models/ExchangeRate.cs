@@ -8,7 +8,10 @@ namespace Coinbase.Common.Models
         [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
         public string Currency { get; set; }
 
+        //[JsonProperty("rates", NullValueHandling = NullValueHandling.Ignore)]
+        //public Rates Rates { get; set; }
+
         [JsonProperty("rates", NullValueHandling = NullValueHandling.Ignore)]
-        public Rates Rates { get; set; }
+        public Dictionary<string, decimal> Rates { get; set; }
     }
 }
