@@ -8,7 +8,7 @@ namespace CoinBase.Business
     {
         Task<List<Currency>> GetCurrenciesAsync(string[] currenciesName);
 
-        Task<ExchangeRateData> GetExchangeRatesAsync(string cuurency);
+        Task<ExchangeRate> GetExchangeRatesAsync(string cuurency);
 
         Task<BuyPrice> GetBuyPriceAsync(string currenciesPair);
     }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Coinbase.Common.Models
 {
-    public class ExchangeRateData
+    public class ExchangeRate
     {
         [JsonProperty("currency", NullValueHandling = NullValueHandling.Ignore)]
         public string Currency { get; set; }
