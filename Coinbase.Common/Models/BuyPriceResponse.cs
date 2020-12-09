@@ -1,11 +1,10 @@
 ﻿using Newtonsoft.Json;
-using System.Collections.Generic;
 
 namespace Coinbase.Common.Models
 {
-    public class Response
+    public class BuyPriceResponse
     {
         [JsonProperty("data", NullValueHandling = NullValueHandling.Ignore)]
-        public List<Currency> Data { get; set; }
+        public BuyPrice Data { get; set; }
     }
 }

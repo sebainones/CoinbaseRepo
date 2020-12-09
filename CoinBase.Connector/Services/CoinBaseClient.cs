@@ -12,6 +12,7 @@ namespace Coinbase.Connector.Services
     {
         private static readonly HttpClient httpClient = new HttpClient() { BaseAddress = new Uri(AppSettings.HydratedAppSettings.ApiEndpoint) };
         private readonly ILogger logger;
+
         private const string ApiKeyField = "CB-ACCESS-KEY";
         private string MessageSignaturField = "CB-ACCESS-SIGN";
         private const string TimestampField = "CB-ACCESS-TIMESTAMP";
@@ -33,64 +34,34 @@ namespace Coinbase.Connector.Services
 
         public async Task<T> MakeNormalRequestCallAsync<T>(string requestPath, string body = "")
         {
-            logger.LogInformation("MakeNormalRequestCallAsync");
+            AddBasicRequestHeaders();
 
-            T items = default;
+            return await PerformRequest<T>(requestPath);
+            //return typedResult;
+        }
+
+        private async Task<T> PerformRequest<T>(string requestPath)
+        {
             try
             {
-                AddBasicRequestHeaders();
-
                 var result = await httpClient.GetAsync(requestPath);
                 result.EnsureSuccessStatusCode();
-
-                string contenido = await result.Content.ReadAsStringAsync();
-
-                items = JsonConvert.DeserializeObject<T>(contenido);
-
+                string content = await result.Content.ReadAsStringAsync();
+                T typedResult = JsonConvert.DeserializeObject<T>(content);
+                return typedResult;
             }
             catch (Exception exception)
             {
                 logger.LogError(exception.Message, null);
             }
-            return items;
+            return default;
         }
 
-        public async void MakeNormalRequestCall(string method, string requestPath, string body = "")
+        public async Task<T> MakeAuthorizedRequestCall<T>(string requestPath, string body)
         {
-            try
-            {
-                AddBasicRequestHeaders();
+            AddAuthorizedRequestHeaders(RestMethods.GET, requestPath, body);
 
-                PerformRequest(requestPath);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception.Message, null);
-            }
-        }
-        public async void MakeAuthorizedRequestCall(string method, string requestPath, string body = "")
-        {
-            try
-            {
-                AddAuthorizedRequestHeaders(method, requestPath, body);
-
-                PerformRequest(requestPath);
-            }
-            catch (Exception exception)
-            {
-                logger.LogError(exception.Message, null);
-            }
-        }
-
-        private static void PerformRequest(string requestPath)
-        {
-            Task<HttpResponseMessage> task = httpClient.GetAsync(requestPath);
-
-            task.Wait();
-
-            var result = task.Result;
-
-            Console.WriteLine(result);
+            return await PerformRequest<T>(requestPath);
         }
 
         private void AddAuthorizedRequestHeaders(string method, string requestPath, string body = "")
@@ -115,7 +86,6 @@ namespace Coinbase.Connector.Services
             // CB-ACCESS-TIMESTAMP Timestamp for your request
             httpClient.DefaultRequestHeaders.Add(TimestampField, currentTiempStamp);
         }
-
         private void AddBasicRequestHeaders()
         {
             httpClient.DefaultRequestHeaders.Accept.Clear();
