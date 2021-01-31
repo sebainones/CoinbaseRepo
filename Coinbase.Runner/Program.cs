@@ -35,7 +35,7 @@ namespace Coinbase.Runner
             var exchangeRateData = getCurrencyExchangeTask.Result;
             Console.WriteLine($"1 {Currencies.EUR} = {exchangeRateData.Rates[Currencies.USD]} {Currencies.USD}");
 
-            BuyPrice btcUsdBuyPrice = business.GetBuyPriceAsync(Pairs.BTCUSD).Result;
+            BuyPrice btcUsdBuyPrice = business.GetBuyPriceAsync(CryptoFiatPairs.BTCUSD).Result;
             Console.WriteLine($"1 {btcUsdBuyPrice.Base} = { btcUsdBuyPrice.Amount} {btcUsdBuyPrice.Currency}");
         }
 

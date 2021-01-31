@@ -17,16 +17,21 @@
     <Grid>
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="Loaded">
-                <i:InvokeCommandAction Command="{Binding LoadedCommand}" />
+                <i:InvokeCommandAction Command="{Binding LoadedPricesBasedOnEurCommand}" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
 
-        <GroupBox Header="Pric€s">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <GroupBox Header="Pric€s" Grid.Row="0">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -48,10 +53,47 @@
                     <Label Content="ETH"></Label>
                     <Label Content="{Binding Eth}"></Label>
                 </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Vertical" >
+                    <Label Content="LTC"></Label>
+                    <Label Content="{Binding Ltc}"></Label>
+                </StackPanel>
             </Grid>
-
-
         </GroupBox>
-        
+
+        <GroupBox Header="Crypto-Fiat-Pairs" Grid.Row="1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Loaded">
+                    <i:InvokeCommandAction Command="{Binding PairsGroupLoadedCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" >
+                    <Label Content="BTC/EUR"></Label>
+                    <Label Content="{Binding BtcEur}"></Label>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" >
+                    <Label Content="BTC/USD"></Label>
+                    <Label Content="{Binding BtcUsd}"></Label>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" >
+                    <Label Content="ETH/EUR"></Label>
+                    <Label Content="{Binding EthEur}"></Label>
+                </StackPanel>
+                <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Vertical" >
+                    <Label Content="LTC/EUR"></Label>
+                    <Label Content="{Binding LtcEur}"></Label>
+                </StackPanel>
+            </Grid>
+        </GroupBox>
+
     </Grid>
 </Window>

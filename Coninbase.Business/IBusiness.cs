@@ -15,6 +15,13 @@ namespace CoinBase.Business
         /// <returns></returns>
         Task<ExchangeRate> GetExchangeRatesAsync(string currency);
 
+        /// <summary>
+        /// Get the total price to buy one bitcoin or ether.
+        /// https://help.coinbase.com/en/pro/trading-and-funding/cryptocurrency-trading-pairs/locations-and-trading-pairs
+        // Some countries have access to crypto/fiat trading pairs while other countries can only access crypto/crypto trading pairs.
+        /// </summary>
+        /// <param name="currenciesPair"></param>
+        /// <returns></returns>
         Task<BuyPrice> GetBuyPriceAsync(string currenciesPair);
     }
 }

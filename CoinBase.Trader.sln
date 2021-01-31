@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoinBase.Business", "Coninb
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase.Common", "Coinbase.Common\Coinbase.Common.csproj", "{6BAF134A-186C-42C6-B224-FA889A5FC3F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase.Runner", "Coinbase.Runner\Coinbase.Runner.csproj", "{D060C387-3AC9-4BB9-97B1-E1BE9FC68779}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase.ConsoleRunner", "Coinbase.Runner\Coinbase.ConsoleRunner.csproj", "{D060C387-3AC9-4BB9-97B1-E1BE9FC68779}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coinbase.ClientApp", "Coinbase.ClientApp\Coinbase.ClientApp.csproj", "{AD13780D-B7F1-4675-8CE1-4FC760547CCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coinbase.ClientApp", "Coinbase.ClientApp\Coinbase.ClientApp.csproj", "{AD13780D-B7F1-4675-8CE1-4FC760547CCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

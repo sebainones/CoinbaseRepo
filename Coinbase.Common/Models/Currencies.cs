@@ -6,5 +6,6 @@
         public static string EUR => nameof(EUR);
         public static string BTC => nameof(BTC);
         public static string ETH => nameof(ETH);
+        public static string LTC => nameof(LTC);
     }
 }
