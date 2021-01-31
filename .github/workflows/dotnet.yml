@@ -23,10 +23,10 @@ jobs:
     - name: Restore Common dependencies
       run: dotnet restore Coinbase.Common/Coinbase.Common.csproj
     - name: Restore Coinbase Connector dependencies
-      run: dotnet restore Coinbase.Connector/Coinbase.Connector.csproj
+      run: dotnet restore Coinbase.Connector/*.csproj
     - name: Build Common
       run: dotnet build --no-restore Coinbase.Common/Coinbase.Common.csproj
     - name: Build Connector
-      run: dotnet build --no-restore Coinbase.Connector/Coinbase.Connector.csproj
+      run: dotnet build --no-restore Coinbase.Connector/*.csproj
     #- name: Test
      # run: dotnet test --no-build --verbosity normal
