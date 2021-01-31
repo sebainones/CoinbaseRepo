@@ -17,9 +17,16 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
+    - name: Display the directory structure
+      run: ls -al
+      shell: sh
+    - name: Restore Coinbase Connector dependencies
+      run: dotnet restore CoinBase.Connector/*.csproj
+    - name: Restore Common dependencies
+      run: dotnet restore Coinbase.Common/Coinbase.Common.csproj    
+    - name: Build Common
+      run: dotnet build --no-restore Coinbase.Common/Coinbase.Common.csproj
+    - name: Build Connector
+      run: dotnet build --no-restore CoinBase.Connector/*.csproj
     #- name: Test
      # run: dotnet test --no-build --verbosity normal
