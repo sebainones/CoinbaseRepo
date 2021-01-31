@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Restore dependencies
-      run: dotnet restore .\Coinbase.Common\Coinbase.Common.csproj
+      run: dotnet restore ~/Coinbase.Common/Coinbase.Common.csproj
     - name: Build
-      run: dotnet build --no-restore .\Coinbase.Common\Coinbase.Common.csproj
+      run: dotnet build --no-restore ~/Coinbase.Common/Coinbase.Common.csproj
     #- name: Test
      # run: dotnet test --no-build --verbosity normal
