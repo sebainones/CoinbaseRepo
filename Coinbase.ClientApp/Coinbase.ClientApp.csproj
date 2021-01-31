@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoinBase.Connector\CoinBase.Connector.csproj" />
+    <ProjectReference Include="..\Coinbase.Infrastructure\Coinbase.Infrastructure.csproj" />
     <ProjectReference Include="..\Coninbase.Business\CoinBase.Business.csproj" />
   </ItemGroup>
 

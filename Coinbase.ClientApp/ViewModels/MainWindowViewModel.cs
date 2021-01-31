@@ -1,4 +1,5 @@
 ﻿using Coinbase.Common.Models;
+using Coinbase.Infrastructure;
 using CoinBase.Business;
 using Microsoft.Extensions.Logging;
 using Prism.Commands;
@@ -116,15 +117,16 @@ namespace Coinbase.ClientApp.ViewModels
         public ICommand LoadedPricesBasedOnEurCommand { get; set; }
 
         public ICommand PairsGroupLoadedCommand { get; set; }
-
+        public ICoinbaseJsonSerializer<BuyPrice> CoinBaseJsonSerializer { get; }
 
         private readonly IBusiness business;
         private readonly ILogger logger;
 
-        public MainWindowViewModel(IBusiness business, ILogger<MainWindowViewModel> logger)
+        public MainWindowViewModel(IBusiness business, ILogger<MainWindowViewModel> logger, ICoinbaseJsonSerializer<BuyPrice> coinBaseJsonSerializer)
         {
             this.business = business ?? throw new ArgumentNullException(nameof(business));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            CoinBaseJsonSerializer = coinBaseJsonSerializer ?? throw new ArgumentNullException(nameof(coinBaseJsonSerializer));
 
             LoadedPricesBasedOnEurCommand = new DelegateCommand(LoadPricesBasedOnEurosAsync);
             PairsGroupLoadedCommand = new DelegateCommand(CryptoFiatPairsGroupLoadedAsync);
@@ -136,7 +138,7 @@ namespace Coinbase.ClientApp.ViewModels
             {
                 BuyPrice buyPriceResult = await business.GetBuyPriceAsync(CryptoFiatPairs.BTCEUR);
                 BtcEur = buyPriceResult.Amount;
-
+                CoinBaseJsonSerializer.TrySerialize(buyPriceResult);
 
                 logger.LogInformation(BtcEur);
 

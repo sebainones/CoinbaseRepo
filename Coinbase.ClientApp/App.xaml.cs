@@ -1,8 +1,10 @@
 ﻿using System.Windows;
 using Coinbase.ClientApp.ViewModels;
 using Coinbase.ClientApp.Views;
+using Coinbase.Common.Models;
 using Coinbase.Connector.Services;
 using CoinBase.Business;
+using Coinbase.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Coinbase.ClientApp
@@ -21,6 +23,8 @@ namespace Coinbase.ClientApp
 
         private static ServiceProvider ConfigureServices(IServiceCollection services)
         {
+
+            services.AddSingleton<ICoinbaseJsonSerializer<BuyPrice>, CoinbaeJsonSerializer>();
             services.AddSingleton<IBusiness, Business>();
             services.AddSingleton<ICoinBaseClient, CoinBaseClient>();
 
