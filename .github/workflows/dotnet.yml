@@ -22,8 +22,8 @@ jobs:
       shell: sh
     - name: Restore Common dependencies
       run: dotnet restore Coinbase.Common/Coinbase.Common.csproj
-    - name: Restore  Coinbase Connector dependencies
-      run: dotnet restore  Coinbase.Connector/Coinbase.Connector.csproj
+    - name: Restore Coinbase Connector dependencies
+      run: dotnet restore Coinbase.Connector/Coinbase.Connector.csproj
     - name: Build Common
       run: dotnet build --no-restore Coinbase.Common/Coinbase.Common.csproj
     - name: Build Connector
