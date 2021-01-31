@@ -21,12 +21,12 @@ jobs:
       run: ls -al
       shell: sh
     - name: Restore Coinbase Connector dependencies
-      run: dotnet restore Coinbase.Connector/*.csproj
+      run: dotnet restore CoinBase.Connector/*.csproj
     - name: Restore Common dependencies
       run: dotnet restore Coinbase.Common/Coinbase.Common.csproj    
     - name: Build Common
       run: dotnet build --no-restore Coinbase.Common/Coinbase.Common.csproj
     - name: Build Connector
-      run: dotnet build --no-restore Coinbase.Connector/*.csproj
+      run: dotnet build --no-restore CoinBase.Connector/*.csproj
     #- name: Test
      # run: dotnet test --no-build --verbosity normal
